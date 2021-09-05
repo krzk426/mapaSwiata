@@ -6,8 +6,8 @@
           <div class="col-sm"></div>
           <div class="col-sm"></div>
         </div>
-      </div>
-      <div class="container-fluid">
+        <!-- </div>
+      <div class="container-fluid" style="border:solid"> -->
         <div class="row">
           <div class="col-sm worldAhead">
             <span v-show="!active">{{
@@ -19,18 +19,19 @@
           <div class="col-sm break"></div>
         </div>
         <div class="row options">
-          <div class="col-4 place" v-bind:style="{ notChoosen: active }">
-            Mosbuild
-          </div>
-          <div class="col-4 place">
-            <span>{{ getString("foreground", "worldAhead") }}</span>
-          </div>
-          <div class="col-4 ">
+          <!-- <div
+            class="col-5 d-flex flex-column flex-wrap p-0 mt-2 cityList"
+            :class="{ placesUp: !showPlaces }"
+          > -->
+          <div
+            class="col-5 d-flex flex-column flex-wrap p-0 mt-2 cityList"
+            id="showPlaces"
+          >
             <div
-              v-for="(place, index) in thirdColPlaces"
+              v-for="(place, index) in places"
               v-bind:style="{ notChoosen: active }"
               :key="index"
-              class="place"
+              class="list-group-item list-group-item-action place p-1 m-0"
               @click="
                 sendCoordinates(
                   place.xPosition,
@@ -41,13 +42,18 @@
                 )
               "
             >
-              <span
-              
-                :class="{ notChoosen: index != choosen && active }"
-                
-                >{{ place.label }}</span
-              >
+              <span :class="{ notChoosen: index != choosen && active }">{{
+                place.label
+              }}</span>
             </div>
+          </div>
+          <div class="col-1"></div>
+          <div
+            id="aboutCompany"
+            class="col-5 d-flex flex-column"
+            :class="{ placesUp: !showAbout }"
+          >
+            <about-company />
           </div>
         </div>
       </div>
@@ -57,58 +63,77 @@
 
 <script>
 import { getString } from "../locale/string";
+import AboutCompany from "./AboutCompany.vue";
+import { places } from "../data/places.js";
+// import Velocity from 'velocity-animate'
 
 export default {
+  
   name: "PlaceToChoose",
   data() {
     return {
-      xPosition: "733px",
+      xPosition: "737px",
       yPosition: "97px",
       choosen: 0,
       active: false,
-      thirdColPlaces: [
-        {
-          xPosition: "860px",
-          yPosition: "140px",
-          label: this.getString("mosbuild", "label"),
-          city: this.getString("mosbuild", "city"),
-        },
-        {
-          xPosition: "836px",
-          yPosition: "211px",
-          label: this.getString("bau", "label"),
-          city: this.getString("bau", "city"),
-        },
-        {
-          xPosition: "707px",
-          yPosition: "188px",
-          label: this.getString("parisAirShow", "label"),
-          city: this.getString("parisAirShow", "city"),
-        },
-        {
-          xPosition: "755px",
-          yPosition: "200px",
-          label: this.getString("cersaie", "label"),
-          city: this.getString("cersaie", "city"),
-        },
-        {
-          xPosition: "1107px",
-          yPosition: "282px",
-          label: this.getString("ish", "label"),
-          city: this.getString("ish", "city"),
-        },
-        
-      ],
+      places: places,
+      showAbout: true,
+      showPlaces: true,
+      
     };
   },
-  components: {},
+  components: { AboutCompany },
   methods: {
     getString,
     sendCoordinates(x, y, city, label, index) {
+      var element = document.getElementById("aboutCompany");
+       var places = document.getElementById("showPlaces");
       if (this.choosen == index && this.active) {
         this.active = false;
+        if (!this.showAbout) {
+          this.changeAboutPositionDown(element);
+        }
+        if (!this.showPlaces) {
+          this.changeAboutPositionDown(places);
+        }
+        this.showAbout = true;
+        this.showPlaces = true;
+
         this.$emit("show");
       } else {
+        if (
+          x.substr(0, x.indexOf("px")) > 100 &&
+          x.substr(0, x.indexOf("px")) < 700 &&
+          y.substr(0, y.indexOf("px")) > 500 &&
+          y.substr(0, y.indexOf("px")) < 900
+        ) {
+          if (this.showPlaces) {
+          this.changeAboutPositionUp(places);
+        }
+          this.showPlaces = false;
+        } else {
+          if (!this.showPlaces) {
+          this.changeAboutPositionDown(places);
+        }
+          this.showPlaces = true;
+        }
+
+        if (
+          x.substr(0, x.indexOf("px")) > 750 &&
+          y.substr(0, y.indexOf("px")) > 500
+        ) {
+          if (this.showAbout) {
+           this.changeAboutPositionUp(element);
+          }
+          this.showAbout = false;
+          
+        } else {
+          if (!this.showAbout) {
+            this.changeAboutPositionDown(element);
+          }
+          this.showAbout = true;
+        }
+
         this.active = true;
         this.choosen = index;
         this.$emit("coordinates", {
@@ -119,11 +144,38 @@ export default {
         });
       }
     },
+    changeAboutPositionUp(element) {
+      element.animate(
+        [{ transform: "translateY(0)" }, { transform: "translateY(-200px)" }],
+        {
+          fill: "forwards",
+          duration: 1000,
+        }
+      );
+    },
+    changeAboutPositionDown(element) {
+      element.animate(
+        [{ transform: "translateY(-200px)" }, { transform: "translateY(0px)" }],
+        {
+          fill: "forwards",
+          duration: 1000,
+        }
+      );
+    },
   },
 };
 </script>
 
 <style scoped>
+.aboutPage {
+  border: solid;
+
+  margin-top: 7px;
+}
+.cityList {
+  height: 250px !important;
+}
+
 .break {
   height: 120px !important;
 }
@@ -136,6 +188,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
+  width: 100%;
 }
 
 .worldAhead {
@@ -144,10 +197,12 @@ export default {
 }
 .place {
   font-weight: 500;
-  font-size: 18px;
-  /* padding-bottom: 10px; */
-  margin-top: 5px;
+  font-size: 18px !important;
+  color: white;
+  background: none !important;
+  border: none;
   cursor: pointer;
+  width: 33%;
 }
 .place:hover {
   color: #f37379;
@@ -158,7 +213,7 @@ export default {
 .notChoosen:hover {
   color: white;
 }
-.options {
-  width: 600px;
-}
+/* .placesUp {
+  margin-top: -200px !important;
+} */
 </style>

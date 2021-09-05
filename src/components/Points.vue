@@ -3,17 +3,49 @@
     <div :style="pointPosition">
       <div id="circle"></div>
 
-    <div class="about">
-      <div class="label">{{ label }}</div>
-      <div class="line"></div>
-      <div class="city">{{ city }}</div>
+      <div
+        class="about"
+        :class="{
+          leftPoint:
+            xPosition && xPosition.substr(0, xPosition.indexOf('px')) < 250,
+        }"
+      >
+        
+          <transition name="a" mode="out-in">
+
+            <div>
+              <div
+                class="label"
+                :class="{
+                  leftPoint:
+                    xPosition &&
+                    xPosition.substr(0, xPosition.indexOf('px')) < 250,
+                }"
+              >
+                {{ label }}
+              </div>
+              <div class="line"></div>
+              <div
+                class="city"
+                :class="{
+                  leftPoint:
+                    xPosition &&
+                    xPosition.substr(0, xPosition.indexOf('px')) < 250,
+                }"
+              >
+                {{ city }}
+              </div>
+            </div>
+            </transition>
+      
+      </div>
     </div>
-        </div>
   </div>
 </template>
 
 <script>
 import { getString } from "../locale/string";
+import Velocity from "velocity-animate";
 
 export default {
   name: "Points",
@@ -23,11 +55,24 @@ export default {
   },
   methods: {
     getString,
+    beforeEnter: (el) => {
+      el.style.top = "-200px";
+      el.style.opacity = 0;
+    },
+    enter: (el, done) => {
+      let delay = parseInt(el.getAttribute("delay"));
+      let left = parseInt(el.getAttribute("left"));
+
+      Velocity(
+        el,
+        { opacity: 1, left },
+        { delay, duration: 2000, complete: done }
+      );
+    },
   },
   computed: {
     pointPosition() {
       return {
-        // backgroundColor: "white",
         marginLeft: this.xPosition,
         marginTop: this.yPosition,
         color: "white",
@@ -38,8 +83,12 @@ export default {
 </script>
 
 <style>
-#point {
+.a-move {
+  transition: transform 1s;
 }
+
+
+
 #circle {
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
@@ -50,13 +99,12 @@ export default {
   height: 8px;
 }
 hr {
-  /* border: 1px solid white; */
   color: white;
   background-color: white;
   border: 0 none;
 }
 .about {
-  width: 200px;
+  width: 430px;
   margin-left: -210px;
   margin-top: -33px;
 }
@@ -69,11 +117,20 @@ hr {
   height: 2px;
   margin-top: 5px;
   margin-bottom: 5px;
+  width: 200px;
 }
-.city{
+.city {
   color: white;
   font-weight: 300;
   font-size: 12px;
-  /* letter-spacing: 1px; */
+}
+.leftPoint {
+  display: flex;
+}
+
+@media only screen and (max-width: 1800px) {
+  .leftPoint {
+    justify-content: flex-end;
+  }
 }
 </style>

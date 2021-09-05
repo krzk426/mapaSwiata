@@ -7,7 +7,7 @@
             <img id="logo" src="../../assets/logo.png" alt="logo" />
           </div>
           <div class="col-md-1"></div>
-          <div class="col-md-6" id="aboutCompany">
+          <div class="col-md-6" id="infoAboutCompany">
             <div class="text companyName">
               {{ getString("navbar", "companyName1").toUpperCase() }}
               <span id="companyNameBold">{{
