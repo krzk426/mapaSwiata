@@ -44,7 +44,6 @@ export default {
   font-weight: 300;
   font-size: 16px;
   padding-right: 25px;
-  hyphens: manual;
   line-height: 1.6;
   padding-bottom: 50px;
   /* word-break: break-all */

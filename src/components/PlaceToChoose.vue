@@ -2,32 +2,33 @@
   <div id="worldscreen">
     <div class="test">
       <div class="container-fluid">
-        <div class="row">
-          <div class="col-sm"></div>
-          <div class="col-sm"></div>
+        <div class="row d-none d-md-block">
+          <div class="col-lg"></div>
         </div>
-        <!-- </div>
-      <div class="container-fluid" style="border:solid"> -->
         <div class="row">
           <div class="col-sm worldAhead">
-            <span v-show="!active">{{
+            <span v-if="!active">{{
               getString("foreground", "worldAhead")
             }}</span>
+
+            <span v-else class="close" @click="resetCity">
+              <span class=" d-flex align-items-center justify-content-center">
+                x
+              </span>
+            </span>
           </div>
         </div>
-        <div class="row">
+        <div class="row ">
           <div class="col-sm break"></div>
         </div>
+
         <div class="row options">
-          <!-- <div
-            class="col-5 d-flex flex-column flex-wrap p-0 mt-2 cityList"
-            :class="{ placesUp: !showPlaces }"
-          > -->
           <div
-            class="col-5 d-flex flex-column flex-wrap p-0 mt-2 cityList"
+            class="col-md-5 d-flex flex-column flex-wrap p-0 mt-2 cityList"
             id="showPlaces"
           >
             <div
+              :class="{ 'd-none d-md-block': active }"
               v-for="(place, index) in places"
               v-bind:style="{ notChoosen: active }"
               :key="index"
@@ -47,13 +48,13 @@
               }}</span>
             </div>
           </div>
-          <div class="col-1"></div>
+          <div class="d-none d-md-block col-md-1"></div>
           <div
             id="aboutCompany"
-            class="col-5 d-flex flex-column"
+            class=" col-md-5 "
             :class="{ placesUp: !showAbout }"
           >
-            <about-company />
+            <about-company :class="{ 'd-none d-md-block': active }" />
           </div>
         </div>
       </div>
@@ -65,10 +66,8 @@
 import { getString } from "../locale/string";
 import AboutCompany from "./AboutCompany.vue";
 import { places } from "../data/places.js";
-// import Velocity from 'velocity-animate'
 
 export default {
-  
   name: "PlaceToChoose",
   data() {
     return {
@@ -79,21 +78,29 @@ export default {
       places: places,
       showAbout: true,
       showPlaces: true,
-      
     };
   },
   components: { AboutCompany },
   methods: {
     getString,
+    resetCity() {
+      console.log("proba");
+      this.active = false;
+      this.showAbout = true;
+      this.showPlaces = true;
+      this.$emit("show");
+    },
     sendCoordinates(x, y, city, label, index) {
+      var allPage = document.getElementById("app");
+      console.log(allPage.offsetWidth);
       var element = document.getElementById("aboutCompany");
-       var places = document.getElementById("showPlaces");
+      var places = document.getElementById("showPlaces");
       if (this.choosen == index && this.active) {
         this.active = false;
-        if (!this.showAbout) {
+        if (!this.showAbout && allPage.offsetWidth > 768) {
           this.changeAboutPositionDown(element);
         }
-        if (!this.showPlaces) {
+        if (!this.showPlaces && allPage.offsetWidth > 768) {
           this.changeAboutPositionDown(places);
         }
         this.showAbout = true;
@@ -107,14 +114,14 @@ export default {
           y.substr(0, y.indexOf("px")) > 500 &&
           y.substr(0, y.indexOf("px")) < 900
         ) {
-          if (this.showPlaces) {
-          this.changeAboutPositionUp(places);
-        }
+          if (this.showPlaces && allPage.offsetWidth > 768) {
+            this.changeAboutPositionUp(places);
+          }
           this.showPlaces = false;
         } else {
-          if (!this.showPlaces) {
-          this.changeAboutPositionDown(places);
-        }
+          if (!this.showPlaces && allPage.offsetWidth > 768) {
+            this.changeAboutPositionDown(places);
+          }
           this.showPlaces = true;
         }
 
@@ -122,13 +129,12 @@ export default {
           x.substr(0, x.indexOf("px")) > 750 &&
           y.substr(0, y.indexOf("px")) > 500
         ) {
-          if (this.showAbout) {
-           this.changeAboutPositionUp(element);
+          if (this.showAbout && allPage.offsetWidth > 768) {
+            this.changeAboutPositionUp(element);
           }
           this.showAbout = false;
-          
         } else {
-          if (!this.showAbout) {
+          if (!this.showAbout && allPage.offsetWidth > 768) {
             this.changeAboutPositionDown(element);
           }
           this.showAbout = true;
@@ -168,8 +174,6 @@ export default {
 
 <style scoped>
 .aboutPage {
-  border: solid;
-
   margin-top: 7px;
 }
 .cityList {
@@ -188,7 +192,8 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 100%;
+  right: 0px;
+  /* width: 100%; */
 }
 
 .worldAhead {
@@ -213,7 +218,72 @@ export default {
 .notChoosen:hover {
   color: white;
 }
-/* .placesUp {
-  margin-top: -200px !important;
-} */
+
+.close {
+  display: none;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  border: solid white;
+  border-radius: 15px;
+  background-color: #600509;
+}
+.close:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  border: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .close {
+    display: block;
+  }
+  .worldAhead {
+    font-size: 80px !important;
+    /* margin-left: 50px !important; */
+    margin-top: 50px !important;
+  }
+  .place {
+    font-size: 26px !important;
+  }
+  .goBack {
+    display: block;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    color: #a00c0c;
+    background-color: rgba(160, 12, 12, 0.4);
+  }
+  .cityList {
+    /* width: 400px; */
+    height: 450px !important;
+  }
+  #aboutCompany {
+    /* position: absolute; */
+    top: 550px;
+    /* width: 90%; */
+  }
+  .row {
+    display: flex;
+    justify-content: center;
+  }
+
+  [class*="col"] {
+    height: auto;
+  }
+  .break {
+    height: 50px !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .worldAhead {
+    font-size: 40px !important;
+    /* margin-left: 50px !important; */
+    margin-top: 50px !important;
+  }
+
+  .place {
+    font-size: 20px !important;
+  }
+}
 </style>

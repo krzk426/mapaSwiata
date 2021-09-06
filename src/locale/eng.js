@@ -13,7 +13,7 @@ export const eng = {
     },
     aboutContent:{
       title: "We work around the world",
-      desc: "Our work is based on close realtions and business wise flexibility world&shy;wide. Advanced managment system and hi tech facility allows us to manage big projects in short time"
+      desc: "Our work is based on close realtions and business wise flexibility worldwide. Advanced managment system and hi tech facility allows us to manage big projects in short time"
     },
     parisAirShow:{
       city: "Paris (France)",

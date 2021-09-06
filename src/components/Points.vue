@@ -11,7 +11,7 @@
         }"
       >
         
-          <transition name="a" mode="out-in">
+          
 
             <div>
               <div
@@ -36,7 +36,7 @@
                 {{ city }}
               </div>
             </div>
-            </transition>
+          
       
       </div>
     </div>
