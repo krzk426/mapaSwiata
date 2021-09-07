@@ -1,5 +1,5 @@
 <template>
-  <div id="worldscreen">
+  <div id="placesToChoose"  :class="{ 'd-none d-md-block': active }">
     <div class="test">
       <div class="container-fluid">
         <div class="row d-none d-md-block">
@@ -10,12 +10,6 @@
             <span v-if="!active">{{
               getString("foreground", "worldAhead")
             }}</span>
-
-            <span v-else class="close" @click="resetCity">
-              <span class=" d-flex align-items-center justify-content-center">
-                x
-              </span>
-            </span>
           </div>
         </div>
         <div class="row ">
@@ -65,7 +59,6 @@
 <script>
 import { getString } from "../locale/string";
 import AboutCompany from "./AboutCompany.vue";
-import { places } from "../data/places.js";
 
 export default {
   name: "PlaceToChoose",
@@ -75,7 +68,123 @@ export default {
       yPosition: "97px",
       choosen: 0,
       active: false,
-      places: places,
+      places: [
+        {
+          xPosition: "730px",
+          yPosition: "188px",
+          label: getString("ebace", "label"),
+          city: getString("ebace", "city"),
+        },
+        {
+          xPosition: "83px",
+          yPosition: "200px",
+          label: getString("nbaa", "label"),
+          city: getString("nbaa", "city"),
+        },
+        {
+          xPosition: "730px",
+          yPosition: "165px",
+          label: getString("medica", "label"),
+          city: getString("medica", "city"),
+        },
+        {
+          xPosition: "730px",
+          yPosition: "176px",
+          label: getString("orgatec", "label"),
+          city: getString("orgatec", "city"),
+        },
+
+        {
+          xPosition: "47px",
+          yPosition: "95px",
+          label: getString("ids", "label"),
+          city: getString("ids", "city"),
+        },
+        {
+          xPosition: "754px",
+          yPosition: "152px",
+          label: getString("domotex", "label"),
+          city: getString("domotex", "city"),
+        },
+        {
+          xPosition: "849px",
+          yPosition: "565px",
+          label: getString("victoriaFalls", "label"),
+          city: getString("victoriaFalls", "city"),
+        },
+        {
+          xPosition: "789px",
+          yPosition: "660px",
+          label: getString("tableMountain", "label"),
+          city: getString("tableMountain", "city"),
+        },
+        {
+          xPosition: "1285px",
+          yPosition: "223px",
+          label: getString("yunganGrottoes", "label"),
+          city: getString("yunganGrottoes", "city"),
+        },
+        {
+          xPosition: "1391px",
+          yPosition: "612px",
+          label: getString("uluru", "label"),
+          city: getString("uluru", "city"),
+        },
+        {
+          xPosition: "340px",
+          yPosition: "660px",
+          label: getString("lasLajasShrine", "label"),
+          city: getString("lasLajasShrine", "city"),
+        },
+        {
+          xPosition: "1261px",
+          yPosition: "377px",
+          label: getString("angkorWat", "label"),
+          city: getString("angkorWat", "city"),
+        },
+        {
+          xPosition: "1130px",
+          yPosition: "413px",
+          label: getString("sigiriya", "label"),
+          city: getString("sigiriya", "city"),
+        },
+        {
+          xPosition: "930px",
+          yPosition: "564px",
+          label: getString("avenueOfTheBaobabs", "label"),
+          city: getString("avenueOfTheBaobabs", "city"),
+        },
+        {
+          xPosition: "860px",
+          yPosition: "140px",
+          label: getString("mosbuild", "label"),
+          city: getString("mosbuild", "city"),
+        },
+        {
+          xPosition: "836px",
+          yPosition: "211px",
+          label: getString("bau", "label"),
+          city: getString("bau", "city"),
+        },
+        {
+          xPosition: "707px",
+          yPosition: "188px",
+          label: getString("parisAirShow", "label"),
+          city: getString("parisAirShow", "city"),
+        },
+        {
+          xPosition: "755px",
+          yPosition: "200px",
+          label: getString("cersaie", "label"),
+          city: getString("cersaie", "city"),
+        },
+        {
+          xPosition: "1107px",
+          yPosition: "282px",
+          label: getString("ish", "label"),
+          city: getString("ish", "city"),
+        },
+      ],
       showAbout: true,
       showPlaces: true,
     };
@@ -84,17 +193,52 @@ export default {
   methods: {
     getString,
     resetCity() {
-      console.log("proba");
       this.active = false;
       this.showAbout = true;
       this.showPlaces = true;
+      var center = document.getElementById("center");
+
+      center.animate(
+        [
+          { backgroundColor: "rgba(255,2555,255,0)" },
+          { left: "0px", right: "0px" },
+        ],
+        {
+          fill: "forwards",
+          duration: 1000,
+        }
+      );
       this.$emit("show");
     },
     sendCoordinates(x, y, city, label, index) {
       var allPage = document.getElementById("app");
-      console.log(allPage.offsetWidth);
+
       var element = document.getElementById("aboutCompany");
       var places = document.getElementById("showPlaces");
+
+      if (
+        allPage.offsetWidth <= 768 && x.substr(0, x.indexOf("px")) > allPage.offsetWidth
+      ) {
+        
+        var center = document.getElementById("center"); 
+        var app = document.getElementById("app");
+
+        var leftMove =
+          -x.substr(0, x.indexOf("px")) + (app.offsetWidth * 3) / 4;
+        var rightMove = -x.substr(0, x.indexOf("px"));
+       
+        center.animate(
+          [
+            { left: 0, right: 0},
+            { left: leftMove + "px", right: rightMove + "px" },
+          ],
+          {
+            fill: "forwards",
+            duration: 1000,
+          }
+        );
+
+      }
       if (this.choosen == index && this.active) {
         this.active = false;
         if (!this.showAbout && allPage.offsetWidth > 768) {
@@ -193,7 +337,6 @@ export default {
   top: 0px;
   left: 0px;
   right: 0px;
-  /* width: 100%; */
 }
 
 .worldAhead {
@@ -219,27 +362,10 @@ export default {
   color: white;
 }
 
-.close {
-  display: none;
-  width: 30px;
-  height: 30px;
-  font-size: 18px;
-  border: solid white;
-  border-radius: 15px;
-  background-color: #600509;
-}
-.close:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-  border: none;
-}
 
 @media only screen and (max-width: 768px) {
-  .close {
-    display: block;
-  }
   .worldAhead {
     font-size: 80px !important;
-    /* margin-left: 50px !important; */
     margin-top: 50px !important;
   }
   .place {
@@ -254,13 +380,10 @@ export default {
     background-color: rgba(160, 12, 12, 0.4);
   }
   .cityList {
-    /* width: 400px; */
-    height: 450px !important;
+    height: 400px !important;
   }
   #aboutCompany {
-    /* position: absolute; */
     top: 550px;
-    /* width: 90%; */
   }
   .row {
     display: flex;
@@ -273,12 +396,16 @@ export default {
   .break {
     height: 50px !important;
   }
+  #center{
+    left: -500px;
+    right: -600px;
+  }
+
 }
 
 @media only screen and (max-width: 600px) {
   .worldAhead {
     font-size: 40px !important;
-    /* margin-left: 50px !important; */
     margin-top: 50px !important;
   }
 

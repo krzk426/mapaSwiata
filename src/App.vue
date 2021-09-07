@@ -79,11 +79,13 @@ body{
   /* background-image: url("./assets/background.png"); */
   background-color: #A00c0c;
    font-family: "Montserrat", sans-serif;
+  
 }
 @media only screen and (max-width: 768px) {
   body{
-        touch-action: pan-y pan-x;
+        touch-action: pan-y;
         box-sizing: border-box;
+         overflow-x: hidden;
     }
 }
 
