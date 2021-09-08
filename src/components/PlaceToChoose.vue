@@ -1,12 +1,15 @@
 <template>
-  <div id="placesToChoose"  :class="{ 'd-none d-md-block': active }">
-    <div class="test">
-      <div class="container-fluid">
+  <div
+    id="placesToChoose"
+    class="d-flex justify-content-center justify-self-center justify-items-center"
+  >
+    <div id="test" class="test" :class="{ 'd-none d-md-block': active }">
+      <div class="container">
         <div class="row d-none d-md-block">
           <div class="col-lg"></div>
         </div>
         <div class="row">
-          <div class="col-sm worldAhead">
+          <div class="col-sm worldAhead" id="worldAhead">
             <span v-if="!active">{{
               getString("foreground", "worldAhead")
             }}</span>
@@ -43,11 +46,7 @@
             </div>
           </div>
           <div class="d-none d-md-block col-md-1"></div>
-          <div
-            id="aboutCompany"
-            class=" col-md-5 "
-            :class="{ placesUp: !showAbout }"
-          >
+          <div id="aboutCompany" class=" col-md-6 " style="padding: 0px">
             <about-company :class="{ 'd-none d-md-block': active }" />
           </div>
         </div>
@@ -193,10 +192,23 @@ export default {
   methods: {
     getString,
     resetCity() {
+      var element = document.getElementById("aboutCompany");
+      var places = document.getElementById("showPlaces");
+      var allPage = document.getElementById("app");
+      if (!this.showAbout) {
+        if (allPage.offsetWidth > 768) this.changeAboutPositionDown(element);
+        else if(this.element != null) this.element.top = 0;
+      }
+      if (!this.showPlaces && allPage.offsetWidth > 768) {
+        if (allPage.offsetWidth > 768) this.changeAboutPositionDown(places);
+        else if(this.places != null) this.places.top = 0;
+      }
+
       this.active = false;
       this.showAbout = true;
       this.showPlaces = true;
       var center = document.getElementById("center");
+      var placesToChoose = document.getElementById("test");
 
       center.animate(
         [
@@ -208,28 +220,38 @@ export default {
           duration: 1000,
         }
       );
+
+      placesToChoose.animate([{ opacity: 0 }, { opacity: 1 }], {
+        fill: "forwards",
+        duration: 1000,
+      });
       this.$emit("show");
     },
     sendCoordinates(x, y, city, label, index) {
       var allPage = document.getElementById("app");
-
       var element = document.getElementById("aboutCompany");
       var places = document.getElementById("showPlaces");
-
+      var center = document.getElementById("center");
+    
       if (
-        allPage.offsetWidth <= 768 && x.substr(0, x.indexOf("px")) > allPage.offsetWidth
+        !(this.choosen == index && this.active) &&
+        allPage.offsetWidth < 1556
       ) {
-        
-        var center = document.getElementById("center"); 
-        var app = document.getElementById("app");
-
         var leftMove =
-          -x.substr(0, x.indexOf("px")) + (app.offsetWidth * 3) / 4;
+          -x.substr(0, x.indexOf("px")) + (allPage.offsetWidth * 3) / 4;
         var rightMove = -x.substr(0, x.indexOf("px"));
-       
+        var placesToChoose = document.getElementById("test");
+        if (leftMove > 0) leftMove = 0;
+        if (allPage.offsetWidth <= 768) {
+          placesToChoose.animate([{ opacity: 1 }, { opacity: 0 }], {
+            fill: "forwards",
+            duration: 1000,
+          });
+        }      
+
         center.animate(
           [
-            { left: 0, right: 0},
+            { left: center.offsetLeft + "px" },
             { left: leftMove + "px", right: rightMove + "px" },
           ],
           {
@@ -237,10 +259,15 @@ export default {
             duration: 1000,
           }
         );
-
       }
       if (this.choosen == index && this.active) {
         this.active = false;
+        if (x.substr(0, x.indexOf("px")) > (allPage.offsetWidth * 3) / 4) {
+          center.animate([{}, { left: 0, right: 0 }], {
+            fill: "forwards",
+            duration: 1000,
+          });
+        }
         if (!this.showAbout && allPage.offsetWidth > 768) {
           this.changeAboutPositionDown(element);
         }
@@ -253,10 +280,12 @@ export default {
         this.$emit("show");
       } else {
         if (
-          x.substr(0, x.indexOf("px")) > 100 &&
-          x.substr(0, x.indexOf("px")) < 700 &&
-          y.substr(0, y.indexOf("px")) > 500 &&
-          y.substr(0, y.indexOf("px")) < 900
+          x.substr(0, x.indexOf("px")) > places.offsetLeft - 10 &&
+          x.substr(0, x.indexOf("px")) <
+            places.offsetLeft + places.offsetWidth + 10 &&
+          y.substr(0, y.indexOf("px")) > places.offsetTop - 10 &&
+          y.substr(0, y.indexOf("px")) <
+            places.offsetTop + places.offsetHeight + 10
         ) {
           if (this.showPlaces && allPage.offsetWidth > 768) {
             this.changeAboutPositionUp(places);
@@ -270,8 +299,8 @@ export default {
         }
 
         if (
-          x.substr(0, x.indexOf("px")) > 750 &&
-          y.substr(0, y.indexOf("px")) > 500
+          x.substr(0, x.indexOf("px")) >= element.offsetLeft - 10 &&
+          y.substr(0, y.indexOf("px")) >= element.offsetTop + 10
         ) {
           if (this.showAbout && allPage.offsetWidth > 768) {
             this.changeAboutPositionUp(element);
@@ -296,7 +325,7 @@ export default {
     },
     changeAboutPositionUp(element) {
       element.animate(
-        [{ transform: "translateY(0)" }, { transform: "translateY(-200px)" }],
+        [{ transform: "translateY(0)" }, { transform: "translateY(-300px)" }],
         {
           fill: "forwards",
           duration: 1000,
@@ -305,7 +334,7 @@ export default {
     },
     changeAboutPositionDown(element) {
       element.animate(
-        [{ transform: "translateY(-200px)" }, { transform: "translateY(0px)" }],
+        [{ transform: "translateY(-300px)" }, { transform: "translateY(0px)" }],
         {
           fill: "forwards",
           duration: 1000,
@@ -320,23 +349,27 @@ export default {
 .aboutPage {
   margin-top: 7px;
 }
+.options {
+  margin-left: 4px;
+  margin-right: 4px;
+}
 .cityList {
   height: 250px !important;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .break {
-  height: 120px !important;
+  height: 140px !important;
 }
 [class*="col"] {
   padding: 1rem;
   color: white;
-  height: 180px;
+  height: 165px;
 }
 .test {
   position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
+  top: 90px;
 }
 
 .worldAhead {
@@ -362,11 +395,22 @@ export default {
   color: white;
 }
 
+@media only screen and (max-width: 990px) {
+  .place {
+    font-size: 16px !important;
+  }
+}
 
 @media only screen and (max-width: 768px) {
+  #aboutCompany {
+    margin-top: 40px !important;
+  }
   .worldAhead {
-    font-size: 80px !important;
+    font-size: 75px !important;
     margin-top: 50px !important;
+  }
+  .test {
+    top: 0px;
   }
   .place {
     font-size: 26px !important;
@@ -380,11 +424,9 @@ export default {
     background-color: rgba(160, 12, 12, 0.4);
   }
   .cityList {
-    height: 400px !important;
+    height: 350px !important;
   }
-  #aboutCompany {
-    top: 550px;
-  }
+
   .row {
     display: flex;
     justify-content: center;
@@ -394,23 +436,37 @@ export default {
     height: auto;
   }
   .break {
-    height: 50px !important;
+    height: 0px !important;
   }
-  #center{
-    left: -500px;
-    right: -600px;
-  }
-
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 580px) {
   .worldAhead {
-    font-size: 40px !important;
+    font-size: 60px !important;
     margin-top: 50px !important;
   }
 
   .place {
-    font-size: 20px !important;
+    font-size: 18px !important;
+  }
+
+  .cityList {
+    height: 250px !important;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .worldAhead {
+    font-size: 50px !important;
+  }
+}
+
+@media only screen and (max-width: 390px) {
+  .worldAhead {
+    font-size: 40px !important;
+  }
+  .place {
+    font-size: 16px !important;
   }
 }
 </style>

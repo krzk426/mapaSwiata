@@ -59,7 +59,6 @@ export default {
   methods: {
     getString,
     resetCity() {
-      console.log("cos");
       this.$emit("resetCityMobile");
     },
     beforeEnter: (el) => {

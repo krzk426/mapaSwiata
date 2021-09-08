@@ -7,7 +7,7 @@
             <div>
               <img id="world" src="../assets/world.png" />
             </div>
-            
+
             <div id="points">
               <Points
                 id="placePoint"
@@ -19,14 +19,15 @@
                 v-on:resetCityMobile="resetCityMobile"
               />
             </div>
+          </div>
+          
             <PlaceToChoose
               ref="allPlaces"
-              :xPosition="xPosition"
               id="placeToChoose"
               v-on:coordinates="changeCoordinates"
               v-on:show="setShow"
             />
-          </div>
+          
         </div>
       </div>
     </div>
@@ -81,21 +82,14 @@ export default {
       this.$refs.allPlaces.resetCity();
     },
   },
-  computed: {
-    mobileMap() {
-      return {
-        objectPosition: this.xPosition,
-      };
-    },
-  },
 };
 </script>
 
 <style scoped>
 .center {
   width: 1556px;
-
   position: relative;
+
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -106,15 +100,21 @@ export default {
   top: 0px;
   left: 0px;
 }
+#worldImg {
+  width: 100%;
+}
+.places {
+  margin: 0 auto;
+}
 
 @media only screen and (max-width: 768px) {
   .center {
+    background-size: cover;
     width: 100%;
   }
 
   #world {
     object-fit: cover;
-    height: 800px;
   }
 }
 </style>

@@ -61,19 +61,19 @@ export const eng = {
     },
     victoriaFalls:{
       city:"Zimbabwe  (Zambia)",
-      label: "Victoria Falls"
+      label: "Victoria"
     },
     avenueOfTheBaobabs:{
       city:"Menabe  (Madagascar)",
-      label: "Alley of the Baobabs"
+      label: "Baobabs"
     },
     tableMountain:{
       city:"Cape Town  (South Africa)",
-      label: "Table Mountain"
+      label: "Mountain"
     },
     yunganGrottoes:{
       city:"Shanxi (China)",
-      label: "Yungang Grottoes"
+      label: "Grottoes"
     },
     uluru:{
       city:"Australia (Northern Territory)",
@@ -81,11 +81,11 @@ export const eng = {
     },
     lasLajasShrine:{
       city:"Ipiales (Colombia)",
-      label: "Las Lajas Shrine"
+      label: "Shrine"
     },
     angkorWat:{
       city: "Siem Reap (Cambodia)",
-      label: "Angkor Wat"
+      label: "Angkor"
     },
     sigiriya:{
       city: "Central Province (Sri Lanka)",

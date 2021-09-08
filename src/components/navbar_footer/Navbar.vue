@@ -1,5 +1,8 @@
 <template>
-  <div id="nav" class="d-none d-md-block">
+  <div id="nav" class="d-none d-md-block ">
+    <div class="d-flex justify-content-center">
+    <div class="navCenter" >
+     <div class="container-fluid">
     <div class="row  ">
       <div class="col-md-3 d-flex flex-row align-items-center justify-content-center" >
         
@@ -44,6 +47,9 @@
           </div>
         </div>
       </div>
+      </div>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -79,8 +85,12 @@ export default {
 .breakSpace{
   width: 20%
 }
-#nav {
-  margin: 40px;
+#nav {  
+
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 40px;
+  margin-bottom: 10px;
 }
 .text {
   font-family: "Montserrat", sans-serif;
@@ -101,6 +111,9 @@ text-align: left;
   margin-left: 20px;
   /* text-align: left; */
   font-weight: 400 !important;
+}
+.navCenter{
+  width: 1556px;
 }
 .row {
   display: flex;

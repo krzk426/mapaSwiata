@@ -17,7 +17,7 @@ export const pl = {
   },
   parisAirShow:{
     city: "Paryż (Francja)",
-    label: "Salon Lotniczy w Paryżu"
+    label: "Salon Lotniczy"
   },
   cersaie:{
     city: "Bologna (Italy)",
@@ -65,7 +65,7 @@ export const pl = {
   },
   avenueOfTheBaobabs:{
     city:"Menabe  (Madagaskar)",
-    label: "Aleja Baobabów"
+    label: "Baobaby"
   },
   tableMountain:{
     city:"Kapsztad  (Południowa Afryka)",
@@ -73,7 +73,7 @@ export const pl = {
   },
   yunganGrottoes:{
     city:"Shanxi (Chiny)",
-    label: "Groty Yungang"
+    label: "Yungang"
   },
   uluru:{
     city:"Australia (Terytorium Północne)",
@@ -81,11 +81,11 @@ export const pl = {
   },
   lasLajasShrine:{
     city:"Ipiales (Kolumbia)",
-    label: "Bazylika Las Lajas"
+    label: "Las Lajas"
   },
   angkorWat:{
     city: "Siem Reap (Cambodia)",
-    label: "Angkor Wat"
+    label: "Angkor"
   },
   sigiriya:{
     city: "Central Province (Sri Lanka)",
